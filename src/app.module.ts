@@ -9,13 +9,14 @@ import { StudentModule } from './student/student.module';
 import { UpperCaseDirective } from './shared/directives';
 import { DATABASE_CONFIG } from './config/constants';
 import databaseConfig from './config/database.config';
+import serverConfig from './config/server.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [databaseConfig]
+      load: [databaseConfig, serverConfig]
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
