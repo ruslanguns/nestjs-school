@@ -37,7 +37,8 @@ import serverConfig from './config/server.config';
       schemaDirectives: {
         upper: UpperCaseDirective
       },
-      playground: true
+      playground: true,
+      introspection: true
     }),
     LessonModule,
     StudentModule
