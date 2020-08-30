@@ -2,8 +2,7 @@ import { Resolver, Query, Mutation, Args, Parent, ResolveField, Subscription } f
 import { PubSub } from 'apollo-server-express';
 import { LessonType } from './lesson.type';
 import { LessonService } from './lesson.service';
-import { CreateLessonInput } from './lesson.input';
-import { AssignStudentsToLessonInput } from './assign-students-to-lesson-input';
+import { CreateLessonInput, AssignStudentsToLessonInput, EditLessonInput } from './inputs';
 import { StudentService } from 'src/student/student.service';
 import { Lesson } from './lesson.entity';
 
@@ -34,6 +33,14 @@ export class LessonResolver {
     @Args('createLessonInput') createLessonInput: CreateLessonInput
   ) {
     return await this.lessonService.createLesson(createLessonInput)
+  }
+
+  @Mutation(returns => LessonType)
+  async editLesson(
+    @Args('id') id: string,
+    @Args('editLessonInput') editLessonInput: EditLessonInput
+  ) {
+    return await this.lessonService.editLesson(id, editLessonInput)
   }
 
   @Mutation(returns => LessonType)
