@@ -36,7 +36,8 @@ import serverConfig from './config/server.config';
       installSubscriptionHandlers: true,
       schemaDirectives: {
         upper: UpperCaseDirective
-      }
+      },
+      playground: true
     }),
     LessonModule,
     StudentModule
