@@ -9,5 +9,5 @@ const createMongoURI = (): string => {
   const username = process.env.DB_USERNAME;
   const name = process.env.DB_NAME;
   const password = process.env.DB_PASSWORD;
-  return `mongodb+srv://${username}:${password}@${host}/${name}?retryWrites=true&w=majority`
+  return `mongodb+srv://${username}:${password}@${host}/${name}`
 }

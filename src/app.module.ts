@@ -25,6 +25,10 @@ import serverConfig from './config/server.config';
         url: config.get<string>(DATABASE_CONFIG),
         synchronize: true,
         useUnifiedTopology: true,
+        extra: {
+          retryWrites: true,
+          w: 'majority'
+        },
         entities: [
           Lesson,
           Student
