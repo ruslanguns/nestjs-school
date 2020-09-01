@@ -12,5 +12,7 @@ import { StudentModule } from 'src/student/student.module';
     StudentModule
   ],
   providers: [LessonResolver, LessonType, LessonService],
+  exports: [LessonService]
+
 })
 export class LessonModule {}

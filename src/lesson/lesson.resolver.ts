@@ -2,9 +2,10 @@ import { Resolver, Query, Mutation, Args, Parent, ResolveField, Subscription } f
 import { PubSub } from 'apollo-server-express';
 import { LessonType } from './lesson.type';
 import { LessonService } from './lesson.service';
-import { CreateLessonInput, AssignStudentsToLessonInput, EditLessonInput } from './inputs';
+import { CreateLessonInput, LessonAndStudentsInput, EditLessonInput } from './inputs';
 import { StudentService } from 'src/student/student.service';
 import { Lesson } from './lesson.entity';
+import { StudentType } from 'src/student/student.type';
 
 const pubSub = new PubSub
 
@@ -52,14 +53,23 @@ export class LessonResolver {
 
   @Mutation(returns => LessonType)
   async assignStudentsToLesson(
-    @Args('assignStudentsToLessonInput') assignStudentsToLessonInput: AssignStudentsToLessonInput
+    @Args('lessonAndStudents') lessonAndStudents: LessonAndStudentsInput
   ) {
-    const addedStudentToLesson = await this.lessonService.assignStudentsToLesson(assignStudentsToLessonInput)
+    const addedStudentToLesson = await this.lessonService.assignStudentsToLesson(lessonAndStudents)
     pubSub.publish('addedStudentToLesson', { addedStudentToLesson })
     return addedStudentToLesson;
   }
 
-  @ResolveField()
+  @Mutation(returns => LessonType)
+  async removeStudentsToLesson(
+    @Args('lessonAndStudents') lessonAndStudents: LessonAndStudentsInput
+  ) {
+    const removedStudentFromLesson = await this.lessonService.removeStudentsToLesson(lessonAndStudents)
+    pubSub.publish('removedStudentFromLesson', { removedStudentFromLesson })
+    return removedStudentFromLesson;
+  }
+
+  @ResolveField(returns => StudentType)
   async students(
     @Parent() lesson: Lesson
   ) {
@@ -71,6 +81,13 @@ export class LessonResolver {
   })
   addStudentHandler() {
     return pubSub.asyncIterator('addedStudentToLesson');
+  }
+
+  @Subscription(returns => LessonType, {
+    name: 'removedStudentFromLesson'
+  })
+  removeStudentHandler() {
+    return pubSub.asyncIterator('removedStudentFromLesson');
   }
 
 }

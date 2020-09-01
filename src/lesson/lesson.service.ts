@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuid } from 'uuid';
 import { Lesson } from './lesson.entity';
 import { Repository } from 'typeorm';
-import { CreateLessonInput, AssignStudentsToLessonInput, EditLessonInput } from './inputs';
+import { CreateLessonInput, LessonAndStudentsInput, EditLessonInput } from './inputs';
+import { removeElementsFromArray } from 'src/common/helpers';
 
 @Injectable()
 export class LessonService {
@@ -46,11 +47,28 @@ export class LessonService {
     return await this.lessonRepository.remove(lesson)
   }
 
-  async assignStudentsToLesson(assignStudentsToLessonInput: AssignStudentsToLessonInput): Promise<Lesson> {
+  async assignStudentsToLesson(assignStudentsToLessonInput: LessonAndStudentsInput): Promise<Lesson> {
     const { lessonId, studentIds } = assignStudentsToLessonInput;
     const lesson = await this.lessonRepository.findOne({ id: lessonId });
     lesson.students = Array.from(new Set([...lesson.students, ...studentIds]));
     return this.lessonRepository.save(lesson);
+  }
+
+  async removeStudentsToLesson(assignStudentsToLessonInput: LessonAndStudentsInput): Promise<Lesson> {
+    const { lessonId, studentIds } = assignStudentsToLessonInput;
+    const lesson = await this.lessonRepository.findOne({ id: lessonId });
+    lesson.students = removeElementsFromArray(lesson.students, studentIds);
+    return this.lessonRepository.save(lesson);
+  }
+
+  async studentInLesson(studentId: string) {
+    return await this.lessonRepository.find({
+      where: {
+        students: {
+          $all: [studentId]
+        }
+      }
+    })
   }
 
 }

@@ -6,7 +6,7 @@ import { LessonModule } from './lesson/lesson.module';
 import { Lesson } from './lesson/lesson.entity';
 import { Student } from './student/student.entity';
 import { StudentModule } from './student/student.module';
-import { UpperCaseDirective } from './shared/directives';
+import { UpperCaseDirective } from './common/directives';
 import { DATABASE_CONFIG } from './config/constants';
 import databaseConfig from './config/database.config';
 import serverConfig from './config/server.config';

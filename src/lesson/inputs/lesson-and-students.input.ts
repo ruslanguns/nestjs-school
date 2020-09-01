@@ -2,7 +2,7 @@ import { InputType, Field, ID } from "@nestjs/graphql";
 import { IsUUID, IsArray } from "class-validator";
 
 @InputType()
-export class AssignStudentsToLessonInput {
+export class LessonAndStudentsInput {
 
   @IsUUID()
   @Field(type => ID)
